@@ -27,7 +27,7 @@
 
         .main-layout { display: flex; flex-grow: 1; overflow: hidden; position: relative; }
 
-        /* --- SIDEBAR: CENTERED ELEMENTS --- */
+        /* --- SIDEBAR --- */
         #prescript-sidebar {
             width: 15%; 
             border: 1px solid var(--index-blue); margin: 10px;
@@ -43,7 +43,7 @@
         #messenger-outer {
             flex-grow: 1; margin: 10px 10px 10px 0; 
             background: url('YanBackground.png') no-repeat center center;
-            background-size: cover; /* Upscaled to fit */
+            background-size: cover;
             border: 2px solid var(--index-black); position: relative; display: flex;
         }
 
@@ -55,40 +55,42 @@
         }
         #lockdown-overlay img { width: 120px; margin-bottom: 20px; }
 
-        /* --- MESSAGE STYLING: BLACK SLATES --- */
+        /* --- MESSAGE STYLING: NO BLUE OUTLINES --- */
         #chat-window { flex-grow: 1; display: flex; flex-direction: column; }
-        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
         
-        .msg-container { align-self: flex-start; max-width: 80%; display: flex; flex-direction: column; }
+        .msg-container { align-self: flex-start; width: 70%; display: flex; flex-direction: column; }
         
         .msg-header { 
-            background: rgba(0, 0, 0, 0.9); /* Higher opacity black */
+            background: rgba(0, 0, 0, 0.95);
             color: var(--index-blue); 
-            padding: 4px 10px; 
-            font-size: 0.65rem; 
-            border: 1px solid var(--index-blue);
-            border-bottom: none;
-            width: fit-content;
+            padding: 6px 12px; 
+            font-size: 0.7rem; 
+            width: 100%; /* Full length of the box */
+            box-sizing: border-box;
+            letter-spacing: 1px;
         }
         
         .msg-body { 
-            background: rgba(0, 0, 0, 0.6); /* Low opacity black */
+            background: rgba(0, 0, 0, 0.65);
             color: white; 
-            padding: 10px 15px; 
-            font-size: 0.85rem; 
-            border: 1px solid var(--index-blue);
+            padding: 12px 15px; 
+            font-size: 0.9rem; 
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 1.4;
         }
 
         /* --- CHAT LIST SIDEBAR --- */
-        #chat-sidebar { width: 280px; border-left: 1px solid var(--index-blue); display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.8); color: var(--index-blue); }
+        #chat-sidebar { width: 280px; border-left: 1px solid var(--index-blue); display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.9); color: var(--index-blue); }
         .search-nav { padding: 10px; border-bottom: 1px solid var(--index-blue); display: flex; flex-direction: column; gap: 8px; }
         #chatSearch { background: black; color: var(--index-blue); border: 1px solid var(--index-blue); padding: 8px; font-family: inherit; }
         
         #chat-list { flex-grow: 1; overflow-y: auto; }
-        .chat-entry { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .chat-entry { padding: 15px; border-bottom: 1px solid rgba(0, 242, 255, 0.1); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .chat-entry:hover { background: rgba(0, 242, 255, 0.1); }
         .chat-entry.active { background: var(--index-blue); color: black; font-weight: bold; }
-        .unread-dot { width: 8px; height: 8px; background: red; border-radius: 50%; box-shadow: 0 0 5px red; }
+        .unread-dot { width: 8px; height: 8px; background: red; border-radius: 50%; box-shadow: 0 0 8px red; }
 
         /* --- CONTROLS --- */
         .controls { 
@@ -106,7 +108,7 @@
         .input-full { width: 94%; padding: 8px; margin: 10px 0; background: #111; border: 1px solid var(--index-blue); color: white; font-family: inherit; }
         .blue-btn { background: var(--index-blue); color: black; border: none; padding: 8px 15px; cursor: pointer; font-family: inherit; font-weight: bold; }
 
-        #msg-input-area { padding: 15px; background: rgba(0, 0, 0, 0.9); border-top: 1px solid var(--index-blue); display: flex; gap: 10px; }
+        #msg-input-area { padding: 15px; background: rgba(0, 0, 0, 0.95); border-top: 1px solid var(--index-blue); display: flex; gap: 10px; }
         #msgInput { flex-grow: 1; background: black; border: 1px solid var(--index-blue); color: white; padding: 8px; font-family: inherit; }
     </style>
 </head>
@@ -123,7 +125,7 @@
                 <div class="prescript-label">YOUR PRESCRIPT:</div>
                 <div id="prescript-text">WAITING FOR UPLINK...</div>
             </div>
-            </div>
+        </div>
 
         <div id="messenger-outer">
             <div id="lockdown-overlay">
@@ -226,7 +228,9 @@
             const u = document.getElementById('uIn').value, p = document.getElementById('pIn').value;
             const snap = await get(ref(userDb, `users/${u}`));
             if(snap.exists() && snap.val().password === p) {
-                currentUser = snap.val(); currentUser.username = u;
+                currentUser = snap.val(); 
+                currentUser.username = u;
+                
                 document.getElementById('lockdown-overlay').style.display = 'none';
                 document.getElementById('login-view').style.display = 'none';
                 document.getElementById('lord-view').style.display = 'block';
@@ -237,7 +241,7 @@
                 loadChatList();
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('auth-btn').innerText = "ACCOUNT";
-            } else alert("Unknown Entity.");
+            } else alert("Unknown Identity.");
         };
 
         document.getElementById('updatePrescriptBtn').onclick = () => {
@@ -283,7 +287,11 @@
                     
                     const header = document.createElement('div');
                     header.className = 'msg-header';
-                    header.innerText = `${msg.sender_display}, ${msg.sender_rank} of the ${msg.sender_finger}`;
+                    // Fallback to "Unknown" if data is missing
+                    const d = sanitize(msg.sender_display || "Anonymous");
+                    const r = sanitize(msg.sender_rank || "Unknown");
+                    const f = sanitize(msg.sender_finger || "Void");
+                    header.innerText = `${d}, ${r} of the ${f}`;
                     
                     const body = document.createElement('div');
                     body.className = 'msg-body';
@@ -299,7 +307,7 @@
 
         document.getElementById('sendMsgBtn').onclick = async () => {
             const text = document.getElementById('msgInput').value;
-            if(!text || !activeChatId) return;
+            if(!text || !activeChatId || !currentUser) return;
             
             const parts = activeChatId.split("_");
             const recipient = parts[0] === currentUser.username ? parts[1] : parts[0];
@@ -325,13 +333,13 @@
         document.getElementById('startChatBtn').onclick = async () => {
             const targetName = document.getElementById('targetDisplay').value;
             const text = document.getElementById('initialMsg').value;
+            if(!text || !currentUser) return;
+
             const usersSnap = await get(ref(userDb, 'users'));
-            let targetUsername = null, targetRank = "", targetFinger = "";
+            let targetUsername = null;
             
             usersSnap.forEach(u => { 
-                if(u.val().display_name === targetName) {
-                    targetUsername = u.key;
-                }
+                if(u.val().display_name === targetName) targetUsername = u.key;
             });
 
             if(!targetUsername) { alert("Recipient not found."); return; }
