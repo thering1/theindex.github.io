@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Index</title>
+    <link rel="icon" type="image/png" href="IndexProselytesIcon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --index-black: #000000;
+            --index-blue: #0084ff;
+            --index-dark-blue: #002b52;
+            --index-white: #ffffff;
+            --index-glow: 0 0 10px rgba(0, 132, 255, 0.5);
+        }
+
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Share Tech Mono', monospace; 
+            background: var(--index-black); 
+            color: var(--index-blue);
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header { 
+            padding: 15px; text-align: center; border-bottom: 2px solid var(--index-blue);
+            box-shadow: var(--index-glow);
+        }
+        h1 { 
+            margin: 0; font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase;
+            animation: typing 2s steps(20); white-space: nowrap; overflow: hidden;
+        }
+
+        .main-layout { display: flex; flex-grow: 1; overflow: hidden; }
+
+        /* --- LEFT QUARTER: THE PRESCRIPT --- */
+        #prescript-sidebar {
+            width: 25%; border: 2px solid var(--index-blue); margin: 10px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            background: var(--index-black); position: relative;
+        }
+        .side-icon { width: 100%; object-fit: contain; }
+        #prescript-content {
+            padding: 20px; text-align: center; font-size: 1.2rem;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .prescript-label { font-size: 0.8rem; opacity: 0.7; margin-bottom: 10px; }
+
+        /* --- RIGHT BOX: THE MESSENGER --- */
+        #messenger-container {
+            flex-grow: 1; margin: 10px 10px 10px 0; background: var(--index-white);
+            border: 2px solid var(--index-black); display: flex; color: black;
+        }
+
+        /* --- SIDEBAR: CHAT LIST --- */
+        #chat-sidebar {
+            width: 300px; border-left: 2px solid var(--index-black);
+            display: flex; flex-direction: column; background: #f0f0f0;
+        }
+        .search-nav { padding: 10px; border-bottom: 1px solid #ccc; display: flex; flex-direction: column; gap: 5px; }
+        #chatSearch { padding: 5px; border: 1px solid black; font-family: inherit; }
+        
+        #chat-list { flex-grow: 1; overflow-y: auto; }
+        .chat-entry { 
+            padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.2s;
+        }
+        .chat-entry:hover { background: #e0e0e0; }
+        .chat-entry.active { background: var(--index-blue); color: white; }
+        .unread-dot { width: 10px; height: 10px; background: red; border-radius: 50%; }
+
+        /* --- CHAT AREA --- */
+        #chat-window { flex-grow: 1; display: flex; flex-direction: column; background: white; }
+        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 70%; padding: 8px 12px; border-radius: 4px; font-size: 0.9rem; }
+        .msg.sent { align-self: flex-end; background: var(--index-blue); color: white; }
+        .msg.received { align-self: flex-start; background: #eee; border: 1px solid #ccc; }
+
+        #msg-input-area { padding: 15px; border-top: 2px solid black; display: flex; gap: 10px; }
+        #msgInput { flex-grow: 1; padding: 10px; border: 1px solid black; font-family: inherit; }
+
+        /* --- MODALS --- */
+        .modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; border: 3px solid var(--index-blue); padding: 20px; z-index: 3000;
+            width: 400px; box-shadow: 10px 10px 0px black; color: black;
+        }
+        .input-full { width: 95%; padding: 8px; margin: 10px 0; border: 1px solid black; font-family: inherit; }
+        .blue-btn { background: var(--index-blue); color: white; border: none; padding: 10px 20px; cursor: pointer; font-family: inherit; font-weight: bold; }
+        
+        /* --- AUTH BUTTONS --- */
+        #auth-btn { position: fixed; bottom: 20px; right: 20px; background: var(--index-blue); color: white; border: none; padding: 10px 20px; cursor: pointer; z-index: 4000; font-family: inherit; }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>THE INDEX</h1>
+    </div>
+
+    <div class="main-layout">
+        <div id="prescript-sidebar">
+            <img src="IndexProselytesIcon.png" class="side-icon">
+            <div id="prescript-content">
+                <div class="prescript-label">YOUR PRESCRIPT:</div>
+                <div id="prescript-text">PLEASE SIGN IN TO RECEIVE ORDERS.</div>
+            </div>
+            <img src="IndexProselytesIcon.png" class="side-icon">
+        </div>
+
+        <div id="messenger-container">
+            <div id="chat-window">
+                <div id="messages-display">
+                    <div style="margin: auto; opacity: 0.3;">SELECT A TRANSMISSION</div>
+                </div>
+                <div id="msg-input-area" style="display:none;">
+                    <input type="text" id="msgInput" placeholder="TYPE MESSAGE...">
+                    <button class="blue-btn" id="sendMsgBtn">SEND</button>
+                </div>
+            </div>
+
+            <div id="chat-sidebar">
+                <div class="search-nav">
+                    <button class="blue-btn" id="newChatBtn">+ NEW MESSAGE</button>
+                    <input type="text" id="chatSearch" placeholder="SEARCH SIBLINGS..." oninput="filterChats()">
+                </div>
+                <div id="chat-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <button id="auth-btn">IDENTIFY</button>
+
+    <div id="new-msg-modal" class="modal">
+        <h3 style="margin-top:0">INITIATE TRANSMISSION</h3>
+        <input type="text" id="targetDisplay" placeholder="Recipient Display Name" class="input-full">
+        <textarea id="initialMsg" placeholder="Message content..." class="input-full" rows="4"></textarea>
+        <div style="display:flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="document.getElementById('new-msg-modal').style.display='none'">X</button>
+            <button class="blue-btn" id="startChatBtn">SEND</button>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal" style="width: 500px;">
+        <div id="login-view">
+            <h3>CREDENTIALS REQUIRED</h3>
+            <input type="text" id="uIn" placeholder="User" class="input-full">
+            <input type="password" id="pIn" placeholder="Pass" class="input-full">
+            <button class="blue-btn" id="loginBtn">VERIFY</button>
+        </div>
+        <div id="lord-view" style="display:none;">
+            <h3 id="welcome-header"></h3>
+            <div id="lord-tools" style="display:none; border-top: 2px solid black; padding-top: 10px;">
+                <label>GLOBAL PRESCRIPT OVERRIDE:</label>
+                <textarea id="newPrescript" class="input-full" rows="3"></textarea>
+                <button class="blue-btn" id="updatePrescriptBtn">ENFORCE ORDER</button>
+            </div>
+            <button onclick="location.reload()" style="margin-top:10px;">LOGOUT</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, get, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const accountConfig = {
+            apiKey: "AIzaSyDHSXFPCiG2kjRAFzqUJn1OQoXD1bCtfH8",
+            authDomain: "account-data-54450.firebaseapp.com",
+            databaseURL: "https://account-data-54450-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "account-data-54450"
+        };
+
+        const indexConfig = {
+            apiKey: "AIzaSyD3EnqA3hUQHFtlghJ19S6Wa8SxLwGFBwk",
+            authDomain: "index-data-4a3b9.firebaseapp.com",
+            databaseURL: "https://index-data-4a3b9-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "index-data-4a3b9"
+        };
+
+        const accApp = initializeApp(accountConfig, "accApp");
+        const idxApp = initializeApp(indexConfig, "idxApp");
+
+        const userDb = getDatabase(accApp);
+        const indexDb = getDatabase(idxApp);
+
+        let currentUser = null;
+        let activeChatId = null;
+
+        // --- PRESCRIPT LOGIC ---
+        onValue(ref(indexDb, 'global_prescript'), snap => {
+            document.getElementById('prescript-text').innerText = snap.val() || "STAY VIGILANT.";
+        });
+
+        // --- AUTH ---
+        document.getElementById('auth-btn').onclick = () => document.getElementById('auth-modal').style.display = 'block';
+        
+        document.getElementById('loginBtn').onclick = async () => {
+            const u = document.getElementById('uIn').value, p = document.getElementById('pIn').value;
+            const snap = await get(ref(userDb, `users/${u}`));
+            if(snap.exists() && snap.val().password === p) {
+                currentUser = snap.val(); currentUser.username = u;
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('lord-view').style.display = 'block';
+                document.getElementById('welcome-header').innerText = `${currentUser.display_name}, ${currentUser.rank}`;
+                
+                if(currentUser.rank === 'Lord') {
+                    document.getElementById('lord-tools').style.display = 'block';
+                    const pSnap = await get(ref(indexDb, 'global_prescript'));
+                    document.getElementById('newPrescript').value = pSnap.val() || "";
+                }
+                loadChatList();
+            } else alert("Unknown Entity.");
+        };
+
+        document.getElementById('updatePrescriptBtn').onclick = () => {
+            set(ref(indexDb, 'global_prescript'), document.getElementById('newPrescript').value);
+            alert("Prescript Distributed.");
+        };
+
+        // --- MESSENGER LOGIC ---
+        function loadChatList() {
+            onValue(ref(indexDb, `user_chats/${currentUser.username}`), snap => {
+                const list = document.getElementById('chat-list');
+                list.innerHTML = "";
+                const chats = [];
+                snap.forEach(c => { chats.push({id: c.key, ...c.val()}); });
+                
+                // Sort by last opened (timestamp) newest top
+                chats.sort((a, b) => b.last_updated - a.last_updated);
+
+                chats.forEach(chat => {
+                    const div = document.createElement('div');
+                    div.className = `chat-entry ${activeChatId === chat.id ? 'active' : ''}`;
+                    div.innerHTML = `<span>${chat.with_name}</span>`;
+                    if(chat.unread) {
+                        const dot = document.createElement('div');
+                        dot.className = 'unread-dot';
+                        div.appendChild(dot);
+                    }
+                    div.onclick = () => openChat(chat.id, chat.with_name);
+                    list.appendChild(div);
+                });
+            });
+        }
+
+        async function openChat(chatId, withName) {
+            activeChatId = chatId;
+            document.getElementById('msg-input-area').style.display = 'flex';
+            
+            // Mark as read and update last opened
+            update(ref(indexDb, `user_chats/${currentUser.username}/${chatId}`), { 
+                unread: false, 
+                last_updated: Date.now() 
+            });
+
+            onValue(ref(indexDb, `messages/${chatId}`), snap => {
+                const display = document.getElementById('messages-display');
+                display.innerHTML = "";
+                snap.forEach(m => {
+                    const msg = m.val();
+                    const div = document.createElement('div');
+                    div.className = `msg ${msg.sender === currentUser.username ? 'sent' : 'received'}`;
+                    div.innerText = msg.text;
+                    display.appendChild(div);
+                });
+                display.scrollTop = display.scrollHeight;
+            });
+            loadChatList(); // Refresh sidebar active state
+        }
+
+        document.getElementById('sendMsgBtn').onclick = () => {
+            const text = document.getElementById('msgInput').value;
+            if(!text || !activeChatId) return;
+            
+            push(ref(indexDb, `messages/${activeChatId}`), {
+                sender: currentUser.username,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+
+            // Notify recipient side (This is simplified for prototype: in a full build, 
+            // you'd need the recipient's username from the chat metadata)
+            document.getElementById('msgInput').value = "";
+        };
+
+        // --- NEW CONVERSATION ---
+        document.getElementById('newChatBtn').onclick = () => document.getElementById('new-msg-modal').style.display = 'block';
+
+        document.getElementById('startChatBtn').onclick = async () => {
+            const targetName = document.getElementById('targetDisplay').value;
+            const text = document.getElementById('initialMsg').value;
+            
+            // Search userDb for display name match
+            const usersSnap = await get(ref(userDb, 'users'));
+            let targetUsername = null;
+            usersSnap.forEach(u => {
+                if(u.val().display_name === targetName) targetUsername = u.key;
+            });
+
+            if(!targetUsername) {
+                alert("Target not found in Proselyte directory.");
+                return;
+            }
+
+            const chatId = [currentUser.username, targetUsername].sort().join("_");
+            
+            // Update both users
+            const updateObj = {};
+            updateObj[`user_chats/${currentUser.username}/${chatId}`] = { with_name: targetName, last_updated: Date.now(), unread: false };
+            updateObj[`user_chats/${targetUsername}/${chatId}`] = { with_name: currentUser.display_name, last_updated: Date.now(), unread: true };
+            
+            await update(ref(indexDb), updateObj);
+            await push(ref(indexDb, `messages/${chatId}`), {
+                sender: currentUser.username,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+
+            document.getElementById('new-msg-modal').style.display = 'none';
+            openChat(chatId, targetName);
+        };
+
+        window.filterChats = () => {
+            const q = document.getElementById('chatSearch').value.toLowerCase();
+            document.querySelectorAll('.chat-entry').forEach(el => {
+                el.style.display = el.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+            });
+        };
+    </script>
+</body>
+</html>
