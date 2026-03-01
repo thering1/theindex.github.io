@@ -10,10 +10,8 @@
     <style>
         :root {
             --index-black: #000000;
-            --index-blue: #0084ff;
-            --index-dark-blue: #002b52;
+            --index-blue: #00f2ff; /* Brighter Cyan Blue */
             --index-white: #ffffff;
-            --index-glow: 0 0 10px rgba(0, 132, 255, 0.5);
         }
 
         body { 
@@ -25,77 +23,74 @@
         }
 
         /* --- HEADER --- */
-        .header { 
-            padding: 15px; text-align: center; border-bottom: 2px solid var(--index-blue);
-            box-shadow: var(--index-glow);
-        }
-        h1 { 
-            margin: 0; font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase;
-            animation: typing 2s steps(20); white-space: nowrap; overflow: hidden;
-        }
+        .header { padding: 10px; text-align: center; border-bottom: 1px solid var(--index-blue); }
+        h1 { margin: 0; font-size: 2.2rem; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 8px var(--index-blue); }
 
-        .main-layout { display: flex; flex-grow: 1; overflow: hidden; }
+        .main-layout { display: flex; flex-grow: 1; overflow: hidden; position: relative; }
 
-        /* --- LEFT QUARTER: THE PRESCRIPT --- */
+        /* --- SIDEBAR: THINNER & SLEEKER --- */
         #prescript-sidebar {
-            width: 25%; border: 2px solid var(--index-blue); margin: 10px;
+            width: 15%; /* Thinner profile */
+            border: 1px solid var(--index-blue); margin: 10px;
             display: flex; flex-direction: column; justify-content: space-between;
-            background: var(--index-black); position: relative;
+            background: var(--index-black);
         }
         .side-icon { width: 100%; object-fit: contain; }
-        #prescript-content {
-            padding: 20px; text-align: center; font-size: 1.2rem;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        .prescript-label { font-size: 0.8rem; opacity: 0.7; margin-bottom: 10px; }
+        #prescript-content { padding: 15px; text-align: center; font-size: 0.9rem; }
+        .prescript-label { font-size: 0.7rem; opacity: 0.6; margin-bottom: 5px; letter-spacing: 2px; }
 
-        /* --- RIGHT BOX: THE MESSENGER --- */
-        #messenger-container {
+        /* --- MESSENGER BOX --- */
+        #messenger-outer {
             flex-grow: 1; margin: 10px 10px 10px 0; background: var(--index-white);
-            border: 2px solid var(--index-black); display: flex; color: black;
+            border: 2px solid var(--index-black); position: relative; display: flex;
         }
 
-        /* --- SIDEBAR: CHAT LIST --- */
-        #chat-sidebar {
-            width: 300px; border-left: 2px solid var(--index-black);
-            display: flex; flex-direction: column; background: #f0f0f0;
+        /* --- LOCKDOWN OVERLAY --- */
+        #lockdown-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--index-black); z-index: 50;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 2px solid var(--index-blue);
         }
-        .search-nav { padding: 10px; border-bottom: 1px solid #ccc; display: flex; flex-direction: column; gap: 5px; }
-        #chatSearch { padding: 5px; border: 1px solid black; font-family: inherit; }
+        #lockdown-overlay img { width: 150px; margin-bottom: 20px; }
+        #lockdown-overlay span { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 3px; }
+
+        /* --- MESSENGER UI --- */
+        #chat-window { flex-grow: 1; display: flex; flex-direction: column; color: black; }
+        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .msg { max-width: 70%; padding: 8px 12px; font-size: 0.85rem; border: 1px solid black; }
+        .msg.sent { align-self: flex-end; background: var(--index-blue); color: black; font-weight: bold; }
+        .msg.received { align-self: flex-start; background: #eee; }
+
+        #chat-sidebar { width: 280px; border-left: 2px solid black; display: flex; flex-direction: column; background: #f5f5f5; color: black; }
+        .search-nav { padding: 10px; border-bottom: 1px solid black; display: flex; flex-direction: column; gap: 8px; }
+        #chatSearch { padding: 8px; border: 1px solid black; font-family: inherit; font-size: 0.8rem; }
         
         #chat-list { flex-grow: 1; overflow-y: auto; }
-        .chat-entry { 
-            padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; 
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.2s;
+        .chat-entry { padding: 12px; border-bottom: 1px solid #ddd; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .chat-entry:hover { background: #e8e8e8; }
+        .chat-entry.active { background: black; color: var(--index-blue); }
+        .unread-dot { width: 8px; height: 8px; background: red; border-radius: 50%; }
+
+        /* --- BOTTOM NAV BAR --- */
+        .controls { 
+            background: var(--index-black); padding: 15px; border-top: 1px solid var(--index-blue);
+            display: flex; justify-content: center; gap: 30px; z-index: 1000;
         }
-        .chat-entry:hover { background: #e0e0e0; }
-        .chat-entry.active { background: var(--index-blue); color: white; }
-        .unread-dot { width: 10px; height: 10px; background: red; border-radius: 50%; }
-
-        /* --- CHAT AREA --- */
-        #chat-window { flex-grow: 1; display: flex; flex-direction: column; background: white; }
-        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 70%; padding: 8px 12px; border-radius: 4px; font-size: 0.9rem; }
-        .msg.sent { align-self: flex-end; background: var(--index-blue); color: white; }
-        .msg.received { align-self: flex-start; background: #eee; border: 1px solid #ccc; }
-
-        #msg-input-area { padding: 15px; border-top: 2px solid black; display: flex; gap: 10px; }
-        #msgInput { flex-grow: 1; padding: 10px; border: 1px solid black; font-family: inherit; }
+        .nav-btn { color: var(--index-blue); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--index-blue); padding: 5px 15px; transition: 0.3s; }
+        .nav-btn:hover { background: var(--index-blue); color: black; }
+        .auth-trigger { background: transparent; color: var(--index-blue); border: 1px solid var(--index-blue); font-family: inherit; cursor: pointer; padding: 5px 15px; }
 
         /* --- MODALS --- */
         .modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; border: 3px solid var(--index-blue); padding: 20px; z-index: 3000;
+            background: white; border: 2px solid var(--index-blue); padding: 20px; z-index: 3000;
             width: 400px; box-shadow: 10px 10px 0px black; color: black;
         }
-        .input-full { width: 95%; padding: 8px; margin: 10px 0; border: 1px solid black; font-family: inherit; }
-        .blue-btn { background: var(--index-blue); color: white; border: none; padding: 10px 20px; cursor: pointer; font-family: inherit; font-weight: bold; }
-        
-        /* --- AUTH BUTTONS --- */
-        #auth-btn { position: fixed; bottom: 20px; right: 20px; background: var(--index-blue); color: white; border: none; padding: 10px 20px; cursor: pointer; z-index: 4000; font-family: inherit; }
+        .input-full { width: 94%; padding: 8px; margin: 10px 0; border: 1px solid black; font-family: inherit; }
+        .blue-btn { background: black; color: var(--index-blue); border: 1px solid var(--index-blue); padding: 8px 15px; cursor: pointer; font-family: inherit; }
 
-        @keyframes typing { from { width: 0 } to { width: 100% } }
+        #msg-input-area { padding: 10px; border-top: 2px solid black; display: flex; gap: 5px; }
     </style>
 </head>
 <body>
@@ -109,59 +104,68 @@
             <img src="IndexProselytesIcon.png" class="side-icon">
             <div id="prescript-content">
                 <div class="prescript-label">YOUR PRESCRIPT:</div>
-                <div id="prescript-text">PLEASE SIGN IN TO RECEIVE ORDERS.</div>
+                <div id="prescript-text">WAITING FOR UPLINK...</div>
             </div>
             <img src="IndexProselytesIcon.png" class="side-icon">
         </div>
 
-        <div id="messenger-container">
+        <div id="messenger-outer">
+            <div id="lockdown-overlay">
+                <img src="IndexProselytesIcon.png" alt="Lock">
+                <span>Must be logged into an account.</span>
+            </div>
+
             <div id="chat-window">
-                <div id="messages-display">
-                    <div style="margin: auto; opacity: 0.3;">SELECT A TRANSMISSION</div>
-                </div>
+                <div id="messages-display"></div>
                 <div id="msg-input-area" style="display:none;">
-                    <input type="text" id="msgInput" placeholder="TYPE MESSAGE...">
+                    <input type="text" id="msgInput" placeholder="ENTER TRANSMISSION..." style="flex-grow:1; border:1px solid black; padding:5px;">
                     <button class="blue-btn" id="sendMsgBtn">SEND</button>
                 </div>
             </div>
 
             <div id="chat-sidebar">
                 <div class="search-nav">
-                    <button class="blue-btn" id="newChatBtn">+ NEW MESSAGE</button>
-                    <input type="text" id="chatSearch" placeholder="SEARCH SIBLINGS..." oninput="filterChats()">
+                    <button class="blue-btn" id="newChatBtn" style="width:100%">+ NEW MESSAGE</button>
+                    <input type="text" id="chatSearch" placeholder="Search conversations..." oninput="filterChats()">
                 </div>
                 <div id="chat-list"></div>
             </div>
         </div>
     </div>
 
-    <button id="auth-btn">IDENTIFY</button>
+    <div class="controls">
+        <a href="https://thering1.github.io/thering.github.io/" class="nav-btn">THE RING</a>
+        <a href="https://thering1.github.io/themiddle.github.io/" class="nav-btn">THE MIDDLE</a>
+        <button id="auth-btn" class="auth-trigger">SIGN IN</button>
+    </div>
 
     <div id="new-msg-modal" class="modal">
-        <h3 style="margin-top:0">INITIATE TRANSMISSION</h3>
+        <h3 style="margin-top:0">NEW MESSAGE</h3>
         <input type="text" id="targetDisplay" placeholder="Recipient Display Name" class="input-full">
-        <textarea id="initialMsg" placeholder="Message content..." class="input-full" rows="4"></textarea>
+        <textarea id="initialMsg" placeholder="Message content..." class="input-full" rows="3"></textarea>
         <div style="display:flex; justify-content: flex-end; gap: 10px;">
             <button onclick="document.getElementById('new-msg-modal').style.display='none'">X</button>
             <button class="blue-btn" id="startChatBtn">SEND</button>
         </div>
     </div>
 
-    <div id="auth-modal" class="modal" style="width: 500px;">
+    <div id="auth-modal" class="modal">
         <div id="login-view">
-            <h3>CREDENTIALS REQUIRED</h3>
+            <h3>IDENTIFY</h3>
             <input type="text" id="uIn" placeholder="User" class="input-full">
             <input type="password" id="pIn" placeholder="Pass" class="input-full">
-            <button class="blue-btn" id="loginBtn">VERIFY</button>
+            <button class="blue-btn" id="loginBtn">LOG IN</button>
+            <button onclick="document.getElementById('auth-modal').style.display='none'" style="margin-left:10px; border:none; background:none; cursor:pointer; text-decoration:underline;">Cancel</button>
         </div>
         <div id="lord-view" style="display:none;">
             <h3 id="welcome-header"></h3>
-            <div id="lord-tools" style="display:none; border-top: 2px solid black; padding-top: 10px;">
-                <label>GLOBAL PRESCRIPT OVERRIDE:</label>
-                <textarea id="newPrescript" class="input-full" rows="3"></textarea>
-                <button class="blue-btn" id="updatePrescriptBtn">ENFORCE ORDER</button>
+            <div id="lord-tools" style="display:none;">
+                <label style="font-size:0.7rem">UPDATE GLOBAL PRESCRIPT:</label>
+                <textarea id="newPrescript" class="input-full"></textarea>
+                <button class="blue-btn" id="updatePrescriptBtn">ENFORCE</button>
             </div>
-            <button onclick="location.reload()" style="margin-top:10px;">LOGOUT</button>
+            <hr>
+            <button onclick="location.reload()" class="blue-btn">LOGOUT</button>
         </div>
     </div>
 
@@ -185,16 +189,15 @@
 
         const accApp = initializeApp(accountConfig, "accApp");
         const idxApp = initializeApp(indexConfig, "idxApp");
-
         const userDb = getDatabase(accApp);
         const indexDb = getDatabase(idxApp);
 
         let currentUser = null;
         let activeChatId = null;
 
-        // --- PRESCRIPT LOGIC ---
+        // --- GLOBAL PRESCRIPT ---
         onValue(ref(indexDb, 'global_prescript'), snap => {
-            document.getElementById('prescript-text').innerText = snap.val() || "STAY VIGILANT.";
+            document.getElementById('prescript-text').innerText = snap.val() || "NO ORDERS RECEIVED.";
         });
 
         // --- AUTH ---
@@ -205,17 +208,18 @@
             const snap = await get(ref(userDb, `users/${u}`));
             if(snap.exists() && snap.val().password === p) {
                 currentUser = snap.val(); currentUser.username = u;
+                document.getElementById('lockdown-overlay').style.display = 'none';
                 document.getElementById('login-view').style.display = 'none';
                 document.getElementById('lord-view').style.display = 'block';
                 document.getElementById('welcome-header').innerText = `${currentUser.display_name}, ${currentUser.rank}`;
                 
                 if(currentUser.rank === 'Lord') {
                     document.getElementById('lord-tools').style.display = 'block';
-                    const pSnap = await get(ref(indexDb, 'global_prescript'));
-                    document.getElementById('newPrescript').value = pSnap.val() || "";
                 }
                 loadChatList();
-            } else alert("Unknown Entity.");
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('auth-btn').innerText = "ACCOUNT";
+            } else alert("Unknown Identity.");
         };
 
         document.getElementById('updatePrescriptBtn').onclick = () => {
@@ -223,15 +227,13 @@
             alert("Prescript Distributed.");
         };
 
-        // --- MESSENGER LOGIC ---
+        // --- MESSENGER ---
         function loadChatList() {
             onValue(ref(indexDb, `user_chats/${currentUser.username}`), snap => {
                 const list = document.getElementById('chat-list');
                 list.innerHTML = "";
                 const chats = [];
                 snap.forEach(c => { chats.push({id: c.key, ...c.val()}); });
-                
-                // Sort by last opened (timestamp) newest top
                 chats.sort((a, b) => b.last_updated - a.last_updated);
 
                 chats.forEach(chat => {
@@ -252,12 +254,7 @@
         async function openChat(chatId, withName) {
             activeChatId = chatId;
             document.getElementById('msg-input-area').style.display = 'flex';
-            
-            // Mark as read and update last opened
-            update(ref(indexDb, `user_chats/${currentUser.username}/${chatId}`), { 
-                unread: false, 
-                last_updated: Date.now() 
-            });
+            update(ref(indexDb, `user_chats/${currentUser.username}/${chatId}`), { unread: false });
 
             onValue(ref(indexDb, `messages/${chatId}`), snap => {
                 const display = document.getElementById('messages-display');
@@ -271,49 +268,45 @@
                 });
                 display.scrollTop = display.scrollHeight;
             });
-            loadChatList(); // Refresh sidebar active state
         }
 
-        document.getElementById('sendMsgBtn').onclick = () => {
+        document.getElementById('sendMsgBtn').onclick = async () => {
             const text = document.getElementById('msgInput').value;
             if(!text || !activeChatId) return;
             
-            push(ref(indexDb, `messages/${activeChatId}`), {
+            const parts = activeChatId.split("_");
+            const recipient = parts[0] === currentUser.username ? parts[1] : parts[0];
+
+            await push(ref(indexDb, `messages/${activeChatId}`), {
                 sender: currentUser.username,
                 text: text,
                 timestamp: serverTimestamp()
             });
 
-            // Notify recipient side (This is simplified for prototype: in a full build, 
-            // you'd need the recipient's username from the chat metadata)
+            const ts = Date.now();
+            await update(ref(indexDb, `user_chats/${currentUser.username}/${activeChatId}`), { last_updated: ts });
+            await update(ref(indexDb, `user_chats/${recipient}/${activeChatId}`), { last_updated: ts, unread: true });
+
             document.getElementById('msgInput').value = "";
         };
 
-        // --- NEW CONVERSATION ---
         document.getElementById('newChatBtn').onclick = () => document.getElementById('new-msg-modal').style.display = 'block';
 
         document.getElementById('startChatBtn').onclick = async () => {
             const targetName = document.getElementById('targetDisplay').value;
             const text = document.getElementById('initialMsg').value;
-            
-            // Search userDb for display name match
             const usersSnap = await get(ref(userDb, 'users'));
             let targetUsername = null;
-            usersSnap.forEach(u => {
-                if(u.val().display_name === targetName) targetUsername = u.key;
-            });
+            usersSnap.forEach(u => { if(u.val().display_name === targetName) targetUsername = u.key; });
 
-            if(!targetUsername) {
-                alert("Target not found in Proselyte directory.");
-                return;
-            }
+            if(!targetUsername) { alert("Recipient not found."); return; }
 
             const chatId = [currentUser.username, targetUsername].sort().join("_");
+            const ts = Date.now();
             
-            // Update both users
             const updateObj = {};
-            updateObj[`user_chats/${currentUser.username}/${chatId}`] = { with_name: targetName, last_updated: Date.now(), unread: false };
-            updateObj[`user_chats/${targetUsername}/${chatId}`] = { with_name: currentUser.display_name, last_updated: Date.now(), unread: true };
+            updateObj[`user_chats/${currentUser.username}/${chatId}`] = { with_name: targetName, last_updated: ts, unread: false };
+            updateObj[`user_chats/${targetUsername}/${chatId}`] = { with_name: currentUser.display_name, last_updated: ts, unread: true };
             
             await update(ref(indexDb), updateObj);
             await push(ref(indexDb, `messages/${chatId}`), {
