@@ -10,7 +10,7 @@
     <style>
         :root {
             --index-black: #000000;
-            --index-blue: #00f2ff; /* Brighter Cyan Blue */
+            --index-blue: #00f2ff;
             --index-white: #ffffff;
         }
 
@@ -22,75 +22,92 @@
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* --- HEADER --- */
         .header { padding: 10px; text-align: center; border-bottom: 1px solid var(--index-blue); }
         h1 { margin: 0; font-size: 2.2rem; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 8px var(--index-blue); }
 
         .main-layout { display: flex; flex-grow: 1; overflow: hidden; position: relative; }
 
-        /* --- SIDEBAR: THINNER & SLEEKER --- */
+        /* --- SIDEBAR: CENTERED ELEMENTS --- */
         #prescript-sidebar {
-            width: 15%; /* Thinner profile */
+            width: 15%; 
             border: 1px solid var(--index-blue); margin: 10px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            background: var(--index-black);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: var(--index-black); gap: 20px;
         }
-        .side-icon { width: 100%; object-fit: contain; }
-        #prescript-content { padding: 15px; text-align: center; font-size: 0.9rem; }
-        .prescript-label { font-size: 0.7rem; opacity: 0.6; margin-bottom: 5px; letter-spacing: 2px; }
+        .side-icon { width: 80%; object-fit: contain; }
+        #prescript-content { text-align: center; padding: 0 10px; }
+        .prescript-label { font-size: 0.7rem; opacity: 0.6; margin-bottom: 8px; letter-spacing: 2px; }
+        #prescript-text { font-size: 0.9rem; color: var(--index-blue); text-shadow: 0 0 5px var(--index-blue); }
 
-        /* --- MESSENGER BOX --- */
+        /* --- MESSENGER: YAN BACKGROUND --- */
         #messenger-outer {
-            flex-grow: 1; margin: 10px 10px 10px 0; background: var(--index-white);
+            flex-grow: 1; margin: 10px 10px 10px 0; 
+            background: url('YanBackground.png') no-repeat center center;
+            background-size: cover; /* Upscaled to fit */
             border: 2px solid var(--index-black); position: relative; display: flex;
         }
 
-        /* --- LOCKDOWN OVERLAY --- */
         #lockdown-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--index-black); z-index: 50;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px solid var(--index-blue);
+            border: 1px solid var(--index-blue);
         }
-        #lockdown-overlay img { width: 150px; margin-bottom: 20px; }
-        #lockdown-overlay span { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 3px; }
+        #lockdown-overlay img { width: 120px; margin-bottom: 20px; }
 
-        /* --- MESSENGER UI --- */
-        #chat-window { flex-grow: 1; display: flex; flex-direction: column; color: black; }
-        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-        .msg { max-width: 70%; padding: 8px 12px; font-size: 0.85rem; border: 1px solid black; }
-        .msg.sent { align-self: flex-end; background: var(--index-blue); color: black; font-weight: bold; }
-        .msg.received { align-self: flex-start; background: #eee; }
+        /* --- MESSAGE STYLING: BLACK SLATES --- */
+        #chat-window { flex-grow: 1; display: flex; flex-direction: column; }
+        #messages-display { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .msg-container { align-self: flex-start; max-width: 80%; display: flex; flex-direction: column; }
+        
+        .msg-header { 
+            background: rgba(0, 0, 0, 0.9); /* Higher opacity black */
+            color: var(--index-blue); 
+            padding: 4px 10px; 
+            font-size: 0.65rem; 
+            border: 1px solid var(--index-blue);
+            border-bottom: none;
+            width: fit-content;
+        }
+        
+        .msg-body { 
+            background: rgba(0, 0, 0, 0.6); /* Low opacity black */
+            color: white; 
+            padding: 10px 15px; 
+            font-size: 0.85rem; 
+            border: 1px solid var(--index-blue);
+        }
 
-        #chat-sidebar { width: 280px; border-left: 2px solid black; display: flex; flex-direction: column; background: #f5f5f5; color: black; }
-        .search-nav { padding: 10px; border-bottom: 1px solid black; display: flex; flex-direction: column; gap: 8px; }
-        #chatSearch { padding: 8px; border: 1px solid black; font-family: inherit; font-size: 0.8rem; }
+        /* --- CHAT LIST SIDEBAR --- */
+        #chat-sidebar { width: 280px; border-left: 1px solid var(--index-blue); display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.8); color: var(--index-blue); }
+        .search-nav { padding: 10px; border-bottom: 1px solid var(--index-blue); display: flex; flex-direction: column; gap: 8px; }
+        #chatSearch { background: black; color: var(--index-blue); border: 1px solid var(--index-blue); padding: 8px; font-family: inherit; }
         
         #chat-list { flex-grow: 1; overflow-y: auto; }
-        .chat-entry { padding: 12px; border-bottom: 1px solid #ddd; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .chat-entry:hover { background: #e8e8e8; }
-        .chat-entry.active { background: black; color: var(--index-blue); }
-        .unread-dot { width: 8px; height: 8px; background: red; border-radius: 50%; }
+        .chat-entry { padding: 12px; border-bottom: 1px solid rgba(0, 242, 255, 0.2); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .chat-entry:hover { background: rgba(0, 242, 255, 0.1); }
+        .chat-entry.active { background: var(--index-blue); color: black; font-weight: bold; }
+        .unread-dot { width: 8px; height: 8px; background: red; border-radius: 50%; box-shadow: 0 0 5px red; }
 
-        /* --- BOTTOM NAV BAR --- */
+        /* --- CONTROLS --- */
         .controls { 
             background: var(--index-black); padding: 15px; border-top: 1px solid var(--index-blue);
             display: flex; justify-content: center; gap: 30px; z-index: 1000;
         }
-        .nav-btn { color: var(--index-blue); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--index-blue); padding: 5px 15px; transition: 0.3s; }
-        .nav-btn:hover { background: var(--index-blue); color: black; }
+        .nav-btn { color: var(--index-blue); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--index-blue); padding: 5px 15px; }
         .auth-trigger { background: transparent; color: var(--index-blue); border: 1px solid var(--index-blue); font-family: inherit; cursor: pointer; padding: 5px 15px; }
 
-        /* --- MODALS --- */
         .modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; border: 2px solid var(--index-blue); padding: 20px; z-index: 3000;
-            width: 400px; box-shadow: 10px 10px 0px black; color: black;
+            background: black; border: 1px solid var(--index-blue); padding: 20px; z-index: 3000;
+            width: 400px; box-shadow: 0 0 20px var(--index-blue); color: var(--index-blue);
         }
-        .input-full { width: 94%; padding: 8px; margin: 10px 0; border: 1px solid black; font-family: inherit; }
-        .blue-btn { background: black; color: var(--index-blue); border: 1px solid var(--index-blue); padding: 8px 15px; cursor: pointer; font-family: inherit; }
+        .input-full { width: 94%; padding: 8px; margin: 10px 0; background: #111; border: 1px solid var(--index-blue); color: white; font-family: inherit; }
+        .blue-btn { background: var(--index-blue); color: black; border: none; padding: 8px 15px; cursor: pointer; font-family: inherit; font-weight: bold; }
 
-        #msg-input-area { padding: 10px; border-top: 2px solid black; display: flex; gap: 5px; }
+        #msg-input-area { padding: 15px; background: rgba(0, 0, 0, 0.9); border-top: 1px solid var(--index-blue); display: flex; gap: 10px; }
+        #msgInput { flex-grow: 1; background: black; border: 1px solid var(--index-blue); color: white; padding: 8px; font-family: inherit; }
     </style>
 </head>
 <body>
@@ -106,8 +123,7 @@
                 <div class="prescript-label">YOUR PRESCRIPT:</div>
                 <div id="prescript-text">WAITING FOR UPLINK...</div>
             </div>
-            <img src="IndexProselytesIcon.png" class="side-icon">
-        </div>
+            </div>
 
         <div id="messenger-outer">
             <div id="lockdown-overlay">
@@ -118,7 +134,7 @@
             <div id="chat-window">
                 <div id="messages-display"></div>
                 <div id="msg-input-area" style="display:none;">
-                    <input type="text" id="msgInput" placeholder="ENTER TRANSMISSION..." style="flex-grow:1; border:1px solid black; padding:5px;">
+                    <input type="text" id="msgInput" placeholder="ENTER TRANSMISSION...">
                     <button class="blue-btn" id="sendMsgBtn">SEND</button>
                 </div>
             </div>
@@ -155,7 +171,6 @@
             <input type="text" id="uIn" placeholder="User" class="input-full">
             <input type="password" id="pIn" placeholder="Pass" class="input-full">
             <button class="blue-btn" id="loginBtn">LOG IN</button>
-            <button onclick="document.getElementById('auth-modal').style.display='none'" style="margin-left:10px; border:none; background:none; cursor:pointer; text-decoration:underline;">Cancel</button>
         </div>
         <div id="lord-view" style="display:none;">
             <h3 id="welcome-header"></h3>
@@ -164,7 +179,7 @@
                 <textarea id="newPrescript" class="input-full"></textarea>
                 <button class="blue-btn" id="updatePrescriptBtn">ENFORCE</button>
             </div>
-            <hr>
+            <hr style="border-color: var(--index-blue)">
             <button onclick="location.reload()" class="blue-btn">LOGOUT</button>
         </div>
     </div>
@@ -195,12 +210,16 @@
         let currentUser = null;
         let activeChatId = null;
 
-        // --- GLOBAL PRESCRIPT ---
+        const sanitize = (str) => {
+            const div = document.createElement('div');
+            div.textContent = str || "";
+            return div.innerHTML;
+        };
+
         onValue(ref(indexDb, 'global_prescript'), snap => {
             document.getElementById('prescript-text').innerText = snap.val() || "NO ORDERS RECEIVED.";
         });
 
-        // --- AUTH ---
         document.getElementById('auth-btn').onclick = () => document.getElementById('auth-modal').style.display = 'block';
         
         document.getElementById('loginBtn').onclick = async () => {
@@ -211,15 +230,14 @@
                 document.getElementById('lockdown-overlay').style.display = 'none';
                 document.getElementById('login-view').style.display = 'none';
                 document.getElementById('lord-view').style.display = 'block';
-                document.getElementById('welcome-header').innerText = `${currentUser.display_name}, ${currentUser.rank}`;
+                document.getElementById('welcome-header').innerText = `${currentUser.display_name}, ${currentUser.rank} of the ${currentUser.finger || 'Void'}`;
                 
-                if(currentUser.rank === 'Lord') {
-                    document.getElementById('lord-tools').style.display = 'block';
-                }
+                if(currentUser.rank === 'Lord') document.getElementById('lord-tools').style.display = 'block';
+                
                 loadChatList();
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('auth-btn').innerText = "ACCOUNT";
-            } else alert("Unknown Identity.");
+            } else alert("Unknown Entity.");
         };
 
         document.getElementById('updatePrescriptBtn').onclick = () => {
@@ -227,7 +245,6 @@
             alert("Prescript Distributed.");
         };
 
-        // --- MESSENGER ---
         function loadChatList() {
             onValue(ref(indexDb, `user_chats/${currentUser.username}`), snap => {
                 const list = document.getElementById('chat-list');
@@ -261,10 +278,20 @@
                 display.innerHTML = "";
                 snap.forEach(m => {
                     const msg = m.val();
-                    const div = document.createElement('div');
-                    div.className = `msg ${msg.sender === currentUser.username ? 'sent' : 'received'}`;
-                    div.innerText = msg.text;
-                    display.appendChild(div);
+                    const container = document.createElement('div');
+                    container.className = 'msg-container';
+                    
+                    const header = document.createElement('div');
+                    header.className = 'msg-header';
+                    header.innerText = `${msg.sender_display}, ${msg.sender_rank} of the ${msg.sender_finger}`;
+                    
+                    const body = document.createElement('div');
+                    body.className = 'msg-body';
+                    body.innerText = msg.text;
+                    
+                    container.appendChild(header);
+                    container.appendChild(body);
+                    display.appendChild(container);
                 });
                 display.scrollTop = display.scrollHeight;
             });
@@ -279,6 +306,9 @@
 
             await push(ref(indexDb, `messages/${activeChatId}`), {
                 sender: currentUser.username,
+                sender_display: currentUser.display_name,
+                sender_rank: currentUser.rank,
+                sender_finger: currentUser.finger || 'Void',
                 text: text,
                 timestamp: serverTimestamp()
             });
@@ -296,8 +326,13 @@
             const targetName = document.getElementById('targetDisplay').value;
             const text = document.getElementById('initialMsg').value;
             const usersSnap = await get(ref(userDb, 'users'));
-            let targetUsername = null;
-            usersSnap.forEach(u => { if(u.val().display_name === targetName) targetUsername = u.key; });
+            let targetUsername = null, targetRank = "", targetFinger = "";
+            
+            usersSnap.forEach(u => { 
+                if(u.val().display_name === targetName) {
+                    targetUsername = u.key;
+                }
+            });
 
             if(!targetUsername) { alert("Recipient not found."); return; }
 
@@ -311,6 +346,9 @@
             await update(ref(indexDb), updateObj);
             await push(ref(indexDb, `messages/${chatId}`), {
                 sender: currentUser.username,
+                sender_display: currentUser.display_name,
+                sender_rank: currentUser.rank,
+                sender_finger: currentUser.finger || 'Void',
                 text: text,
                 timestamp: serverTimestamp()
             });
