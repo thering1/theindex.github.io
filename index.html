@@ -6,6 +6,7 @@
     <title>The Index</title>
     <link rel="icon" type="image/png" href="IndexProselytesIcon.png">
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -97,10 +98,16 @@
             background: var(--index-black); padding: 15px; border-top: 1px solid var(--index-blue);
             display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 1000;
         }
-        .nav-btn { color: var(--index-blue); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--index-blue); padding: 5px 15px; display: flex; align-items: center; gap: 8px; }
-        .nav-btn:hover { background: rgba(0, 242, 255, 0.1); }
+        .nav-btn { text-decoration: none; font-size: 0.8rem; padding: 5px 15px; display: flex; align-items: center; gap: 8px; font-weight: bold;}
         .btn-icon { height: 14px; }
         .auth-trigger { background: transparent; color: var(--index-blue); border: 1px solid var(--index-blue); font-family: inherit; cursor: pointer; padding: 5px 15px; }
+
+        /* --- FINGER COLOR OVERRIDES --- */
+        .link-ring { font-family: 'Courier New', Courier, monospace; color: black; background: white; border: 1px solid black; }
+        .link-middle { font-family: 'Bangers', cursive; color: #ffd700; background: #2e004f; border: 1px solid #ffd700; }
+        .link-pinky { font-family: sans-serif; color: #1a241f; background: rgba(141, 163, 153, 1); border: 1px solid rgba(163, 93, 93, 1); }
+        .link-thumb { font-family: sans-serif; color: white; background: #b22222; border: 1px solid #ffcc00; }
+        .link-prescript { color: var(--index-blue); border: 1px solid var(--index-blue); }
 
         .modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -154,11 +161,11 @@
     </div>
 
     <div class="controls">
-        <a href="https://thering1.github.io/thering.github.io/" class="nav-btn">THE RING</a>
-        <a href="https://thering1.github.io/themiddle.github.io/" class="nav-btn">THE MIDDLE</a>
-        <a href="https://thering1.github.io/thepinky.github.io/" class="nav-btn">THE PINKY</a>
-        <a href="https://thering1.github.io/thethumb.github.io/" class="nav-btn">THE THUMB</a>
-        <a href="https://prescript.neocities.org/" class="nav-btn">
+        <a href="https://thering1.github.io/thering.github.io/" class="nav-btn link-ring">THE RING</a>
+        <a href="https://thering1.github.io/themiddle.github.io/" class="nav-btn link-middle">THE MIDDLE</a>
+        <a href="https://thering1.github.io/thepinky.github.io/" class="nav-btn link-pinky">THE PINKY</a>
+        <a href="https://thering1.github.io/thethumb.github.io/" class="nav-btn link-thumb">THE THUMB</a>
+        <a href="https://prescript.neocities.org/" class="nav-btn link-prescript">
             <img src="IndexProselytesIcon.png" class="btn-icon"> PRESCRIPT
         </a>
         <button id="auth-btn" class="auth-trigger">SIGN IN</button>
