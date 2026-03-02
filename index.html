@@ -218,6 +218,7 @@
         let currentUser = null;
         let activeChatId = null;
 
+        // --- SANITIZATION TOOL ---
         const sanitize = (str) => {
             const div = document.createElement('div');
             div.textContent = str || "";
@@ -225,6 +226,7 @@
         };
 
         onValue(ref(indexDb, 'global_prescript'), snap => {
+            // Use .innerText for immediate protection
             document.getElementById('prescript-text').innerText = snap.val() || "NO ORDERS RECEIVED.";
         });
 
@@ -266,7 +268,8 @@
                 chats.forEach(chat => {
                     const div = document.createElement('div');
                     div.className = `chat-entry ${activeChatId === chat.id ? 'active' : ''}`;
-                    div.innerHTML = `<span>${chat.with_name}</span>`;
+                    // Sanitize chat name
+                    div.innerHTML = `<span>${sanitize(chat.with_name)}</span>`;
                     if(chat.unread) {
                         const dot = document.createElement('div');
                         dot.className = 'unread-dot';
@@ -296,11 +299,11 @@
                     const d = sanitize(msg.sender_display || "Anonymous");
                     const r = sanitize(msg.sender_rank || "Unknown");
                     const f = sanitize(msg.sender_finger || "Void");
-                    header.innerText = `${d}, ${r} of the ${f}`;
+                    header.innerHTML = `${d}, ${r} of the ${f}`;
                     
                     const body = document.createElement('div');
                     body.className = 'msg-body';
-                    body.innerText = msg.text;
+                    body.innerText = msg.text; // innerText blocks scripts
                     
                     container.appendChild(header);
                     container.appendChild(body);
